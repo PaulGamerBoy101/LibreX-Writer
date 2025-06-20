@@ -1,2 +1,4 @@
 # LibreX-Writer
-A Document Editor, Part of the LibreX OffiX Suite
+A Document Editor, Will be Part of my New LibreX OffiX Suite
+
+Issues: The Popups Are 
