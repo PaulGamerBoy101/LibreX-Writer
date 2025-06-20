@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LibreClone - Welcome</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="welcome.css">
+</head>
+<body class="bg-gray-200 font-sans">
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gray-100 border-r border-gray-300 p-4">
+            <h1 class="text-2xl font-bold text-gray-800 mb-6">LibreClone</h1>
+            <div class="space-y-2">
+                <button onclick="createNewDocument()" class="w-full text-left px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">New Document</button>
+                <button onclick="openDocument()" class="w-full text-left px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Open...</button>
+            </div>
+            <h2 class="text-lg font-semibold mt-6 mb-2">Recent Documents</h2>
+            <div id="recent-documents" class="space-y-2"></div>
+        </div>
+        <!-- Main Content -->
+        <div class="flex-1 p-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Create a New Document</h2>
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-gray-100 p-4 rounded border border-gray-300 hover:bg-gray-200 cursor-pointer" onclick="createNewDocument()">
+                        <div class="h-32 bg-white border border-gray-300 mb-2 flex items-center justify-center">
+                            <span class="text-gray-500">Writer Document</span>
+                        </div>
+                        <p class="text-center">Blank Document</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="welcome.js"></script>
+    <script src="open.js"></script>
+</body>
+</html>

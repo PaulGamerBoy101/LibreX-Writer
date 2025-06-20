@@ -1,0 +1,13 @@
+body {
+    font-family: 'Liberation Sans', Arial, sans-serif;
+}
+#recent-documents div {
+    padding: 8px;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#recent-documents div:hover {
+    background: #e6f3ff;
+}

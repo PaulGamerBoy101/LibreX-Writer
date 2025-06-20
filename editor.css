@@ -1,0 +1,95 @@
+body {
+    font-family: 'Liberation Sans', Arial, sans-serif;
+    margin: 16px;
+}
+
+#editor-content {
+    white-space: pre-wrap;
+    font-size: 12pt;
+    border: 1px solid #ccc;
+    padding: 16px;
+    min-height: 400px;
+    outline: none;
+}
+
+#editor-content:focus {
+    border-color: #005566;
+}
+
+#editor-content h1 {
+    font-size: 28pt;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 16pt;
+}
+
+#editor-content h2 {
+    font-size: 24pt;
+    font-weight: bold;
+    margin-bottom: 12pt;
+}
+
+#editor-content h3 {
+    font-size: 18pt;
+    font-weight: bold;
+    margin-bottom: 10pt;
+}
+
+#editor-content h4 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin-bottom: 8pt;
+}
+
+#editor-content p {
+    margin-bottom: 12pt;
+}
+
+#editor-content ol, #editor-content ul {
+    margin-left: 20px;
+    margin-bottom: 12pt;
+}
+
+#editor-content ol[style*="list-style-type: decimal"], #editor-content ul[style*="list-style-type: disc"], #editor-content ol[style*="list-style-type: lower-alpha"] {
+    text-align: inherit;
+}
+
+.active {
+    background-color: #60a5fa !important;
+}
+
+.toolbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.toolbar button, .toolbar select {
+    padding: 6px 12px;
+    font-family: 'Liberation Sans', Arial, sans-serif;
+    font-size: 12pt;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    cursor: pointer;
+}
+
+.toolbar button:hover, .toolbar select:hover {
+    background-color: #e6f3ff;
+}
+
+#doc-title {
+    padding: 6px 12px;
+    font-family: 'Liberation Sans', Arial, sans-serif;
+    font-size: 12pt;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#doc-title:focus {
+    border-color: #005566;
+    outline: none;
+}

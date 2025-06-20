@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LibreClone - Editor</title>
+    <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <button onclick="saveDocument()">Save</button>
+            <select onchange="formatText('style', this.value)">
+                <option value="">Style</option>
+                <option value="H1|Title">Title</option>
+                <option value="P|Normal">Normal</option>
+                <option value="H2|Heading 1">Heading 1</option>
+                <option value="H3|Heading 2">Heading 2</option>
+                <option value="H4|Heading 3">Heading 3</option>
+            </select>
+            <select onchange="document.execCommand('fontName', false, this.value)">
+                <option value="">Font</option>
+                <option value="Liberation Sans">Liberation Sans</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Arial">Arial</option>
+                <option value="Courier New">Courier New</option>
+            </select>
+            <select onchange="document.execCommand('fontSize', false, this.value)">
+                <option value="">Size</option>
+                <option value="3">12</option>
+                <option value="4">16</option>
+                <option value="5">20</option>
+                <option value="6">24</option>
+            </select>
+            <button id="bold-btn" onclick="formatText('bold')">B</button>
+            <button id="italic-btn" onclick="formatText('italic')">I</button>
+            <button id="underline-btn" onclick="formatText('underline')">U</button>
+            <button id="ordered-list-btn" onclick="formatText('insertOrderedList')">1.</button>
+            <button id="unordered-list-btn" onclick="formatText('insertUnorderedList')">•</button>
+            <button id="alpha-list-btn" onclick="formatText('insertOrderedList', 'lower-alpha')">a.</button>
+            <button id="justify-left-btn" onclick="formatText('justifyLeft')">←</button>
+            <button id="justify-center-btn" onclick="formatText('justifyCenter')">↔</button>
+            <button id="justify-right-btn" onclick="formatText('justifyRight')">→</button>
+            <button id="justify-full-btn" onclick="formatText('justifyFull')">⇔</button>
+            <button onclick="window.location.href='index.html'">Back</button>
+        </div>
+        <input id="doc-title" type="text" placeholder="Document Title">
+        <div id="editor-content" contenteditable="true" style="border: 1px solid #ccc; padding: 16px; min-height: 400px;"></div>
+    </div>
+    <script src="editor.js"></script>
+    <script src="save.js"></script>
+</body>
+</html>
