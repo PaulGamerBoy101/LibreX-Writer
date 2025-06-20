@@ -1,59 +1,57 @@
-function loadLibrary(urls) {
-    const tryLoad = async (index = 0) => {
-        if (index >= urls.length) {
-            throw new Error(`Failed to load from all sources: ${urls.join(', ')}`);
-        }
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = urls[index];
-            script.onload = resolve;
-            script.onerror = () => {
-                console.warn(`Failed to load ${urls[index]}. Trying next source...`);
-                tryLoad(index + 1).then(resolve).catch(reject);
-            };
-            document.head.appendChild(script);
-        });
-    };
-    return tryLoad();
+function loadLibrary(localPath) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = localPath;
+        script.onload = resolve;
+        script.onerror = () => reject(new Error(`Failed to load ${localPath}`));
+        document.head.appendChild(script);
+    });
 }
 
 function loadLibraries() {
     const libraries = [
         {
             name: 'JSZip',
-            urls: [
-                'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
-                'https://unpkg.com/jszip@3.10.1/dist/jszip.min.js'
-            ],
+            path: 'jszip.min.js',
             required: false
         },
         {
             name: 'mammoth',
-            urls: [
-                'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js',
-                'https://unpkg.com/mammoth@1.8.0/mammoth.browser.min.js'
-            ],
+            path: 'mammoth.browser.min.js',
             required: false
         },
         {
             name: 'markdown-it',
-            urls: [
-                'https://cdnjs.cloudflare.com/ajax/libs/markdown-it/14.1.0/markdown-it.min.js',
-                'https://unpkg.com/markdown-it@14.1.0/dist/markdown-it.min.js'
-            ],
+            path: 'markdown-it.min.js',
             required: false
         }
     ];
-    return Promise.allSettled(libraries.map(lib => loadLibrary(lib.urls).then(() => lib)))
-        .then(results => {
-            const failed = results
-                .filter(r => r.status === 'rejected')
-                .map(r => `Failed to load ${r.reason.message}`);
-            const loaded = results
-                .filter(r => r.status === 'fulfilled')
-                .map(r => r.value.name);
-            return { failed, loaded, libraries };
-        });
+
+    return Promise.allSettled(
+        libraries.map(lib =>
+            loadLibrary(lib.path)
+                .then(() => {
+                    lib.loaded = true;
+                    return lib;
+                })
+                .catch(error => {
+                    lib.loaded = false;
+                    return Promise.reject({ error, lib });
+                })
+        )
+    ).then(results => {
+        const failed = results
+            .filter(r => r.status === 'rejected')
+            .map(r => `Failed to load ${r.reason.lib.name}: ${r.reason.error.message}`);
+        const loaded = results
+            .filter(r => r.status === 'fulfilled')
+            .map(r => r.value.name);
+        return { failed, loaded, libraries };
+    });
+}
+
+function isLibraryLoaded(name, libraries) {
+    return libraries.some(lib => lib.name === name && lib.loaded);
 }
 
 function openDocument() {
@@ -93,7 +91,7 @@ function openDocument() {
         }
     }).catch(error => {
         console.error('Critical error loading libraries:', error);
-        alert('Critical error loading libraries. Please check your internet connection and try again.');
+        alert('Critical error loading libraries. Please check your setup and try again.');
     });
 }
 
@@ -103,10 +101,8 @@ async function processFile(file, libraries) {
         let content = '<p>Unable to parse file content.</p>';
         const title = file.name.split('.')[0];
 
-        const isLibraryLoaded = name => libraries.some(lib => lib.name === name && libraries.find(l => l.name === name).loaded);
-
         if (extension === 'md') {
-            if (isLibraryLoaded('markdown-it') && typeof MarkdownIt !== 'undefined') {
+            if (isLibraryLoaded('markdown-it', libraries) && typeof MarkdownIt !== 'undefined') {
                 const md = new MarkdownIt();
                 content = md.render(await file.text());
             } else {
@@ -116,7 +112,7 @@ async function processFile(file, libraries) {
             const text = await file.text();
             content = `<p>${text.replace(/\n/g, '</p><p>')}</p>`;
         } else if (extension === 'docx') {
-            if (isLibraryLoaded('mammoth') && typeof mammoth !== 'undefined') {
+            if (isLibraryLoaded('mammoth', libraries) && typeof mammoth !== 'undefined') {
                 const arrayBuffer = await file.arrayBuffer();
                 const result = await mammoth.convertToHtml({ arrayBuffer });
                 content = result.value || '<p>Unable to extract DOCX content.</p>';
@@ -126,7 +122,7 @@ async function processFile(file, libraries) {
                 content = `<p>${text.replace(/[^\x20-\x7E\n]/g, '').replace(/\n/g, '</p><p>')}</p>`;
             }
         } else if (extension === 'odt') {
-            if (isLibraryLoaded('JSZip') && typeof JSZip !== 'undefined') {
+            if (isLibraryLoaded('JSZip', libraries) && typeof JSZip !== 'undefined') {
                 const arrayBuffer = await file.arrayBuffer();
                 const zip = await JSZip.loadAsync(arrayBuffer);
                 const contentXml = await zip.file('content.xml')?.async('string');
