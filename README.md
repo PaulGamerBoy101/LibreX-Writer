@@ -1,5 +1,5 @@
-# LibreX-Writer
-A Document Editor, Will be Part of my New LibreX OffiX Suite
+# LiberX-Writer
+A Document Editor, Will be Part of my New LiberX OffiX Suite
 
 ## Issues
 
